@@ -2,40 +2,40 @@ package tech.sergeyev.telrostesttask.payload;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 @NoArgsConstructor
 @Data
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(
+        level = AccessLevel.PRIVATE
+)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PersonDto {
     @JsonProperty("name")
-    Optional<String> name;
+    String name;
 
     @JsonProperty("lastname")
-    Optional<String> lastname;
+    String lastname;
 
     @JsonProperty("patronymic")
-    Optional<String> patronymic;
+    String patronymic;
 
     @JsonProperty("date_of_birth")
-    Optional<LocalDate> dateOfBirth;
+    LocalDate dateOfBirth;
 
     @JsonProperty("email")
-    Optional<String> email;
+    String email;
 
     @JsonProperty("phone")
-    Optional<String> phone;
+    String phone;
 
     @JsonProperty("login")
-    Optional<String> login;
+    String login;
 
     @JsonProperty("password")
-    Optional<String> password;
+    @Setter
+    String password;
 }

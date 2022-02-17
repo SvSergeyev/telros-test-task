@@ -57,6 +57,8 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registration(@RequestBody RegistrationDto data) throws JsonMappingException {
+        LOGGER.info("Registration request received: data={}", data);
+
         if (personService.existsPersonByLogin(data.getLogin())) {
             return new ResponseEntity<>("Username is already exists", HttpStatus.FORBIDDEN);
         }
@@ -64,6 +66,7 @@ public class AuthController {
         mapper.updateValue(user, data);
 
         personService.save(user);
+        LOGGER.info("Person successfully registered. Assigned id={}", user.getId());
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 }

@@ -7,7 +7,10 @@ import lombok.experimental.FieldDefaults;
 
 @Getter
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(
+        level = AccessLevel.PRIVATE,
+        makeFinal = true
+)
 public class LoginDto {
     String login;
     String password;

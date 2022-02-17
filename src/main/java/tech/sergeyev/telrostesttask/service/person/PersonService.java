@@ -8,6 +8,5 @@ public interface PersonService {
     Boolean existsPersonByLogin(String login);
     Boolean existsPersonById(long id);
     Person save(Person person);
-    void update(Person newPerson);
     void deletePersonById(long id);
 }

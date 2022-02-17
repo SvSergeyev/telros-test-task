@@ -12,17 +12,18 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tech.sergeyev.telrostesttask.payload.LoginDto;
-import tech.sergeyev.telrostesttask.payload.RegistrationDto;
+import tech.sergeyev.telrostesttask.payload.PersonDto;
 import tech.sergeyev.telrostesttask.persistence.model.Person;
 import tech.sergeyev.telrostesttask.service.person.PersonServiceImpl;
 
 @RestController
-@RequestMapping
+@RequestMapping()
 @FieldDefaults(
         level = AccessLevel.PRIVATE,
         makeFinal = true
@@ -33,13 +34,16 @@ public class AuthController {
     AuthenticationManager authenticationManager;
     PersonServiceImpl personService;
     ObjectMapper mapper;
+    PasswordEncoder encoder;
 
     public AuthController(AuthenticationManager authenticationManager,
                           PersonServiceImpl personService,
-                          ObjectMapper mapper) {
+                          ObjectMapper mapper,
+                          PasswordEncoder encoder) {
         this.authenticationManager = authenticationManager;
         this.personService = personService;
         this.mapper = mapper;
+        this.encoder = encoder;
     }
 
     @PostMapping("/login")
@@ -52,16 +56,23 @@ public class AuthController {
                 )
         );
         SecurityContextHolder.getContext().setAuthentication(auth);
+        LOGGER.info("User with username {} successfully login", data.getLogin());
         return new ResponseEntity<>("Login successful", HttpStatus.OK);
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registration(@RequestBody RegistrationDto data) throws JsonMappingException {
+    public ResponseEntity<?> registration(@RequestBody PersonDto data) throws JsonMappingException {
         LOGGER.info("Registration request received: data={}", data);
 
         if (personService.existsPersonByLogin(data.getLogin())) {
             return new ResponseEntity<>("Username is already exists", HttpStatus.FORBIDDEN);
         }
+
+        String password = data.getPassword();
+        if (password != null) {
+            data.setPassword(encoder.encode(password));
+        }
+
         Person user = new Person();
         mapper.updateValue(user, data);
 

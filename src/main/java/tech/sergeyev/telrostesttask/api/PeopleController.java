@@ -53,7 +53,7 @@ public class PeopleController {
 
         mapper.updateValue(person, updatePersonRequest);
         personService.save(person);
-        LOGGER.info("\n\nEntity updated: {}", person);
+        LOGGER.info("Entity updated: {}", person);
 
         return new ResponseEntity<>(person, HttpStatus.OK);
     }

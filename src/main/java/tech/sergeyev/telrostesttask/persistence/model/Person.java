@@ -10,11 +10,9 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@ToString
 public class Person implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

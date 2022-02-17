@@ -60,6 +60,11 @@ public class AuthController {
         return new ResponseEntity<>("Login successful", HttpStatus.OK);
     }
 
+    /**
+     * @param data - DTO-объект для переноса данных в сущность Person.
+     *             За счет аннотации @JsonInclude в классе DTO, Null-значения полей DTO-объекта
+     *             игнорируются при сериализации для переноса в Person .
+     */
     @PostMapping("/signup")
     public ResponseEntity<?> registration(@RequestBody PersonDto data) throws JsonMappingException {
         LOGGER.info("Registration request received: data={}", data);

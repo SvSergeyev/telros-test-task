@@ -1,17 +1,22 @@
 package tech.sergeyev.telrostesttask.service.person;
 
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import tech.sergeyev.telrostesttask.persistence.dao.PersonRepository;
 import tech.sergeyev.telrostesttask.persistence.model.Person;
 
-import java.io.IOException;
-import java.time.LocalDate;
-
 @Service
+@FieldDefaults(
+        level = AccessLevel.PRIVATE,
+        makeFinal = true
+)
 public class PersonServiceImpl implements PersonService {
-
-    private final PersonRepository repository;
+    static Logger LOGGER = LoggerFactory.getLogger(PersonServiceImpl.class);
+    PersonRepository repository;
 
     public PersonServiceImpl(PersonRepository repository) {
         this.repository = repository;
@@ -27,7 +32,12 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Person getPersonById(long id) {
-        return repository.findPersonById(id).orElseThrow();
+        Person person = repository.findPersonById(id).orElse(null);
+        if (person == null) {
+            LOGGER.info("Person with id={} not found", id);
+        }
+        LOGGER.info("Select entity from database: {}", person);
+        return person;
     }
 
     @Override
@@ -43,11 +53,6 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public Person save(Person person) {
         return repository.save(person);
-    }
-
-    @Override
-    public void update(Person newPerson) {
-
     }
 
     @Override
